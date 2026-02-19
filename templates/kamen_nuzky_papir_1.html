@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kámen, nůžky, papír</title>
+    <style>
+        /* Moderní reset a barvy */
+        :root {
+            --primary: #6366f1;
+            --bg: #0f172a;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --text: #f8fafc;
+            --win: #22c55e;
+            --lose: #ef4444;
+            --draw: #f59e0b;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: radial-gradient(circle at top, #1e293b, var(--bg));
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .game-container {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        h1 { font-size: 2rem; margin-bottom: 1.5rem; letter-spacing: -1px; }
+
+        /* Stylování výsledků */
+        .result-box {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            border-radius: 1rem;
+            animation: fadeIn 0.5s ease-out;
+        }
+        .výhra { background: rgba(34, 197, 94, 0.2); color: var(--win); border: 1px solid var(--win); }
+        .prohra { background: rgba(239, 68, 68, 0.2); color: var(--lose); border: 1px solid var(--lose); }
+        .remiza { background: rgba(245, 158, 11, 0.2); color: var(--draw); border: 1px solid var(--draw); }
+
+        /* Skrytí původních radio buttonů */
+        .choices {
+            display: flex;
+            justify-content: space-around;
+            gap: 10px;
+            margin-bottom: 2rem;
+        }
+
+        .choices input[type="radio"] { display: none; }
+
+        /* Vlastní design tlačítek */
+        .choices label {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+            border: 2px solid transparent;
+        }
+
+        .choices label:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+        }
+
+        .choices input[type="radio"]:checked + label {
+            background: var(--primary);
+            border-color: #818cf8;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .submit-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 0.75rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: opacity 0.3s;
+        }
+
+        .submit-btn:hover { opacity: 0.9; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+
+</head>
+<body>
+    <div class="game-container">
+        <h1>Kámen, Nůžky, Papír</h1>
+
+        {% if vysledek %}
+        <div class="result-box {{ vysledek }}">
+            <h2>{{ vysledek|capitalize }}!</h2>
+            <p>Ty: <strong>{{ tah_uzivatele }}</strong> vs. Počítač: <strong>{{ tah_pocitace }}</strong></p>
+        </div>
+        {% endif %}
+
+        <form method="POST" action="/hra">
+            <div class="choices">
+                <input type="radio" id="kamen" name="tah" value="kámen" required>
+                <label for="kamen">🪨<br>Kámen</label>
+
+                <input type="radio" id="nuzky" name="tah" value="nůžky">
+                <label for="nuzky">✂️<br>Nůžky</label>
+
+                <input type="radio" id="papir" name="tah" value="papír">
+                <label for="papir">📄<br>Papír</label>
+            </div>
+            
+            <button type="submit" class="submit-btn">Hrát kolo!</button>
+        </form>
+    </div>
+</body>
+</html>
